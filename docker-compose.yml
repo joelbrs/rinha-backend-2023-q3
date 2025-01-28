@@ -1,0 +1,85 @@
+services:
+  # api1:
+  #   build: .
+  #   hostname: api1
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     - DB_URL=jdbc:postgresql://db:5432/rinha_db
+  #     - DB_USERNAME=rinha
+  #     - DB_PASSWORD=rinha
+  #   expose:
+  #     - "8080"
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.25'
+  #         memory: '0.5GB'
+  #   networks:
+  #     - rinha_network
+
+  # api2:
+  #   build: .
+  #   hostname: api2
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     - DB_URL=jdbc:postgresql://db:5432/rinha_db
+  #     - DB_USERNAME=rinha
+  #     - DB_PASSWORD=rinha
+  #   expose:
+  #     - "8080"
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.25'
+  #         memory: '0.5GB'
+  #   networks:
+  #     - rinha_network
+
+  # nginx:
+  #   image: nginx:latest
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #   depends_on:
+  #     - api1
+  #     - api2
+  #   ports:
+  #     - "9999:9999"
+  #   networks:
+  #     - rinha_network
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.25'
+  #         memory: '0.5GB'
+
+  db:
+    image: postgres
+    restart: always
+    hostname: db
+    environment:
+      POSTGRES_USER: rinha
+      POSTGRES_PASSWORD: rinha
+      POSTGRES_DB: rinha_db
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - rinha_network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: '1.5GB'
+
+networks:
+  rinha_network:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local
+  pg_data:
+    driver: local

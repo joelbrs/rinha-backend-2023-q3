@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: rinha-backend-2023-q3
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/rinha_db}
+    username: ${DB_USERNAME:rinha}
+    password: ${DB_PASSWORD:rinha}
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
