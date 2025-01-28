@@ -24,12 +24,12 @@ public class Pessoa {
     private UUID id;
 
     @NotNull    
-    @Pattern(regexp = ValidationConstants.REGEX_JUST_LETTERS_STRING)
+    @Pattern(regexp = ValidationConstants.REGEX_JUST_LETTERS_STRING, message = ValidationConstants.MSG_INVALID_NAME)
     private String nome;
 
     @NotNull
     private String apelido;
-    private List<@Pattern(regexp = ValidationConstants.REGEX_JUST_LETTERS_STRING) String> stack;
+    private List<@Pattern(regexp = ValidationConstants.REGEX_JUST_LETTERS_STRING, message = ValidationConstants.MSG_INVALID_STACK) String> stack;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = ValidationConstants.DATE_PATTERN)
     private Date nascimento;

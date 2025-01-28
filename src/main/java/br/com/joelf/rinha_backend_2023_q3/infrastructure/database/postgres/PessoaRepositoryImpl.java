@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.joelf.rinha_backend_2023_q3.domain.entities.Pessoa;
 import br.com.joelf.rinha_backend_2023_q3.infrastructure.database.PessoaRepository;
+import br.com.joelf.rinha_backend_2023_q3.infrastructure.database.exceptions.EntityNotFoundException;
 import br.com.joelf.rinha_backend_2023_q3.infrastructure.database.postgres.domain.PgStack;
 import lombok.AllArgsConstructor;
 
@@ -35,7 +36,13 @@ public class PessoaRepositoryImpl implements PessoaRepository {
         SqlParameterSource parameters = new MapSqlParameterSource()
             .addValue("id", id);
         
-        return namedParameterJdbcTemplate.queryForObject(query, parameters, pessoaRowMapper);
+        Pessoa pessoa = 
+            namedParameterJdbcTemplate.queryForObject(query, parameters, pessoaRowMapper);
+
+        if (pessoa == null) {
+            throw new EntityNotFoundException("Pessoa não encontrada");
+        }
+        return pessoa;
     }
 
     @Override
