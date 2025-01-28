@@ -1,11 +1,15 @@
-package br.com.joelf.rinha_backend_2023_q3.config;
+package br.com.joelf.rinha_backend_2023_q3.infrastructure.config;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+import br.com.joelf.rinha_backend_2023_q3.domain.entities.Pessoa;
+import br.com.joelf.rinha_backend_2023_q3.infrastructure.database.mappers.PessoaRowMapper;
 
 @Configuration
 public class JDBCConfig {
@@ -36,5 +40,10 @@ public class JDBCConfig {
         dataSource.setPassword(jdbcPassword);
 
         return dataSource;
+    }
+
+    @Bean
+    public RowMapper<Pessoa> pessoaRowMapper() {
+        return new PessoaRowMapper();
     }
 }
