@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+import com.zaxxer.hikari.HikariDataSource;
 
 import br.com.joelf.rinha_backend_2023_q3.domain.entities.Pessoa;
 import br.com.joelf.rinha_backend_2023_q3.infrastructure.database.mappers.PessoaRowMapper;
@@ -18,26 +19,34 @@ public class JDBCConfig {
     private final String jdbcUrl;
     private final String jdbcUsername;
     private final String jdbcPassword;
+    private final Integer maximumPoolSize;
+    private final Integer minimumIdle;
 
     public JDBCConfig(
             @Value("${spring.datasource.driver-class-name}") String jdbcDriver,
             @Value("${spring.datasource.url}") String jdbcUrl,
             @Value("${spring.datasource.username}") String jdbcUsername,
-            @Value("${spring.datasource.password}") String jdbcPassword
+            @Value("${spring.datasource.password}") String jdbcPassword,
+            @Value("${spring.datasource.hikari.maximum-pool-size}") Integer maximumPoolSize,
+            @Value("${spring.datasource.hikari.minimum-idle}") Integer minimumIdle
     ) {
         this.jdbcDriver = jdbcDriver;
         this.jdbcUrl = jdbcUrl;
         this.jdbcUsername = jdbcUsername;
         this.jdbcPassword = jdbcPassword;
+        this.maximumPoolSize = maximumPoolSize;
+        this.minimumIdle = minimumIdle;
     }
 
     @Bean
     public DataSource postgresDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        HikariDataSource dataSource = new HikariDataSource();
         dataSource.setDriverClassName(jdbcDriver);
-        dataSource.setUrl(jdbcUrl);
+        dataSource.setJdbcUrl(jdbcUrl);
         dataSource.setUsername(jdbcUsername);
         dataSource.setPassword(jdbcPassword);
+        dataSource.setMaximumPoolSize(maximumPoolSize);  
+        dataSource.setMinimumIdle(minimumIdle);
 
         return dataSource;
     }

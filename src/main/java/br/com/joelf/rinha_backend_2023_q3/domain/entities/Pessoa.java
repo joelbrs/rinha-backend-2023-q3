@@ -1,6 +1,6 @@
 package br.com.joelf.rinha_backend_2023_q3.domain.entities;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +29,7 @@ public class Pessoa {
 
     @NotNull
     private String apelido;
+
     private List<@Pattern(regexp = ValidationConstants.REGEX_JUST_LETTERS_STRING, message = ValidationConstants.MSG_INVALID_STACK) String> stack;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = ValidationConstants.DATE_PATTERN)

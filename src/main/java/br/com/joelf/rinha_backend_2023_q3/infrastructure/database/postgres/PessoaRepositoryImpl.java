@@ -72,15 +72,17 @@ public class PessoaRepositoryImpl implements PessoaRepository {
         pessoa.setId(UUID.randomUUID());
 
         String insertPessoaSql = "insert into tb_pessoas (id, nome, apelido, nascimento) values (?, ?, ?, ?)";
-        String insertStackSql = "insert into tb_pessoas_stack (pessoa_id, stack_item) values (:pessoa_id, :stackItem)";
-
-        SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(
-            pessoa.getStack().stream().map(stackItem -> new PgStack(pessoa.getId(), stackItem)
-        ).toArray());
-        
         jdbcTemplate.update(insertPessoaSql, pessoa.getId(), pessoa.getNome(), pessoa.getApelido(), pessoa.getNascimento());
-        namedParameterJdbcTemplate.batchUpdate(insertStackSql, batch);
-
+        
+        if (pessoa.getStack() != null && !pessoa.getStack().isEmpty()) {
+            String insertStackSql = "insert into tb_pessoas_stack (pessoa_id, stack_item) values (:pessoa_id, :stackItem)";
+            
+            SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(
+                pessoa.getStack().stream().map(stackItem -> new PgStack(pessoa.getId(), stackItem)
+            ).toArray());
+            namedParameterJdbcTemplate.batchUpdate(insertStackSql, batch);
+        }
+        
         return pessoa.getId();
     }
 
