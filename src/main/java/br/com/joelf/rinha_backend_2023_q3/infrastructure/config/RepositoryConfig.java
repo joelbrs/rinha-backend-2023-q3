@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import br.com.joelf.rinha_backend_2023_q3.domain.entities.Pessoa;
+import br.com.joelf.rinha_backend_2023_q3.infrastructure.database.CacheRepository;
 import br.com.joelf.rinha_backend_2023_q3.infrastructure.database.PessoaRepository;
 import br.com.joelf.rinha_backend_2023_q3.infrastructure.database.postgres.PessoaRepositoryImpl;
 
@@ -17,8 +18,9 @@ public class RepositoryConfig {
     public PessoaRepository pessoaRepository(
         JdbcTemplate jdbcTemplate,
         NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+        CacheRepository<String, Pessoa> cacheRepository,
         RowMapper<Pessoa> pessoaRowMapper
     ) {
-        return new PessoaRepositoryImpl(jdbcTemplate, namedParameterJdbcTemplate, pessoaRowMapper);
+        return new PessoaRepositoryImpl(jdbcTemplate, namedParameterJdbcTemplate, cacheRepository, pessoaRowMapper);
     }
 }

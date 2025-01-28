@@ -21,6 +21,7 @@ public class JDBCConfig {
     private final String jdbcPassword;
     private final Integer maximumPoolSize;
     private final Integer minimumIdle;
+    private final Integer connectionTimeout;
 
     public JDBCConfig(
             @Value("${spring.datasource.driver-class-name}") String jdbcDriver,
@@ -28,7 +29,8 @@ public class JDBCConfig {
             @Value("${spring.datasource.username}") String jdbcUsername,
             @Value("${spring.datasource.password}") String jdbcPassword,
             @Value("${spring.datasource.hikari.maximum-pool-size}") Integer maximumPoolSize,
-            @Value("${spring.datasource.hikari.minimum-idle}") Integer minimumIdle
+            @Value("${spring.datasource.hikari.minimum-idle}") Integer minimumIdle,
+            @Value("${spring.datasource.hikari.connection-timeout}") Integer connectionTimeout
     ) {
         this.jdbcDriver = jdbcDriver;
         this.jdbcUrl = jdbcUrl;
@@ -36,6 +38,7 @@ public class JDBCConfig {
         this.jdbcPassword = jdbcPassword;
         this.maximumPoolSize = maximumPoolSize;
         this.minimumIdle = minimumIdle;
+        this.connectionTimeout = connectionTimeout;
     }
 
     @Bean
@@ -47,6 +50,7 @@ public class JDBCConfig {
         dataSource.setPassword(jdbcPassword);
         dataSource.setMaximumPoolSize(maximumPoolSize);  
         dataSource.setMinimumIdle(minimumIdle);
+        dataSource.setConnectionTimeout(connectionTimeout);
 
         return dataSource;
     }

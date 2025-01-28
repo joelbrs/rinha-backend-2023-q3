@@ -8,13 +8,15 @@ services:
       - DB_URL=jdbc:postgresql://db:5432/rinha_db
       - DB_USERNAME=rinha
       - DB_PASSWORD=rinha
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     expose:
       - "8080"
     deploy:
       resources:
         limits:
-          cpus: '0.525'
-          memory: '1.25GB'
+          cpus: '0.520'
+          memory: '1.20GB'
     networks:
       - rinha_network
 
@@ -27,13 +29,15 @@ services:
       - DB_URL=jdbc:postgresql://db:5432/rinha_db
       - DB_USERNAME=rinha
       - DB_PASSWORD=rinha
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     expose:
       - "8080"
     deploy:
       resources:
         limits:
-          cpus: '0.525'
-          memory: '1.25GB'
+          cpus: '0.520'
+          memory: '1.20GB'
     networks:
       - rinha_network
 
@@ -74,6 +78,22 @@ services:
         limits:
           cpus: '0.4'
           memory: '490MB'
+  redis:
+    image: redis
+    hostname: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --save 20 1 --loglevel warning
+    networks:
+      - rinha_network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.01'
+          memory: '10MB'
 
 networks:
   rinha_network:
