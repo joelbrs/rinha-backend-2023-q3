@@ -21,6 +21,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Pessoa {
+    
     private UUID id;
 
     @NotNull    

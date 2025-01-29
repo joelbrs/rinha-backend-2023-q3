@@ -7,8 +7,8 @@ spring:
     password: ${DB_PASSWORD:rinha}
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 20
-      minimum-idle: 10
+      maximum-pool-size: 80
+      minimum-idle: 0
       connection-timeout: 60000
   data:
     redis:
@@ -18,3 +18,7 @@ spring:
     init:
       mode: always
       schema-locations: classpath:schema.sql
+
+server:
+  port: ${PORT:8080}
+  connection-timeout: 60000

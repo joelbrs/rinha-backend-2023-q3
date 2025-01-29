@@ -2,7 +2,8 @@ package br.com.joelf.rinha_backend_2023_q3.infrastructure.database.mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,20 +15,19 @@ public class PessoaRowMapper implements RowMapper<Pessoa> {
 
     @Override
     public Pessoa mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Pessoa.PessoaBuilder pessoa = Pessoa.builder()
+        return Pessoa.builder()
                 .id(UUID.fromString(rs.getString("id")))
                 .nome(rs.getString("nome"))
                 .apelido(rs.getString("apelido"))
-                .nascimento(rs.getDate("nascimento"));
+                .nascimento(rs.getDate("nascimento"))
+                .stack(getStacks(rs.getString("stack")))
+                .build();
+    }
 
-        List<String> stack = new ArrayList<>();
-        do {
-            String stackItem = rs.getString("stack_item");
-            if (stackItem != null) {
-                stack.add(stackItem);
-            }
-        } while (rs.next());
-
-        return pessoa.stack(stack).build();
+    private List<String> getStacks(String stack) {
+        if (stack != null && !stack.isEmpty()) {
+            return Arrays.asList(stack.split(","));
+        }
+        return Collections.emptyList();
     }
 }

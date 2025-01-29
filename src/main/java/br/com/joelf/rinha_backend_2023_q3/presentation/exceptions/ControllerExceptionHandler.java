@@ -17,7 +17,7 @@ import br.com.joelf.rinha_backend_2023_q3.infrastructure.database.exceptions.Ent
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    protected ResponseEntity<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
 
         boolean isBadRequest = ex.getFieldErrors().stream().anyMatch(violation -> 
@@ -28,30 +28,30 @@ public class ControllerExceptionHandler {
             status = HttpStatus.BAD_REQUEST;
         }
 
-        return ResponseEntity.status(status).body(ex.getMessage());
+        return ResponseEntity.status(status).build();
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    protected ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    protected ResponseEntity<Void> handleEntityNotFoundException(EntityNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    protected ResponseEntity<Object> handleDuplicateKeyException(DuplicateKeyException ex) {
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
+    protected ResponseEntity<Void> handleDuplicateKeyException(DuplicateKeyException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ResponseEntity<Object> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    protected ResponseEntity<Void> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ResponseEntity<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    protected ResponseEntity<Void> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }

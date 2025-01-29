@@ -1,18 +1,13 @@
 CREATE TABLE IF NOT EXISTS tb_pessoas (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    nome VARCHAR(255) NOT NULL,
-    apelido VARCHAR(255) NOT NULL UNIQUE,
+    id UUID DEFAULT gen_random_uuid(),
+    apelido  VARCHAR(255) CONSTRAINT id_pk PRIMARY KEY,
+    nome  VARCHAR(255),
     nascimento DATE,
-    CONSTRAINT nome_apelido_unique UNIQUE (nome, apelido)
+    stack VARCHAR(1024),
+    busca_trgm TEXT GENERATED ALWAYS AS (
+        LOWER(nome || apelido || stack)
+    ) STORED
 );
 
-CREATE INDEX IF NOT EXISTS idx_nome ON tb_pessoas (nome);
-CREATE INDEX IF NOT EXISTS idx_apelido ON tb_pessoas (apelido);
-CREATE INDEX IF NOT EXISTS idx_nascimento ON tb_pessoas (nascimento);
-
-CREATE TABLE IF NOT EXISTS tb_pessoas_stack (
-    pessoa_id UUID NOT NULL,
-    stack_item VARCHAR(255) NOT NULL,
-    PRIMARY KEY (pessoa_id, stack_item),
-    FOREIGN KEY (pessoa_id) REFERENCES tb_pessoas(id) ON DELETE CASCADE
-);
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_pessoas_busca_trgm ON tb_pessoas USING gist (busca_trgm gist_trgm_ops(SIGLEN=64));
